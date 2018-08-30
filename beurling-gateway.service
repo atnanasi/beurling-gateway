@@ -1,0 +1,18 @@
+[Unit]
+Description=gateway service powered by ssh tunneling 
+After=network.target auditd.service
+
+[Service]
+ExecStartPre=/usr/sbin/sshd -f /home/atnanasi/beurling-gateway/sshd.conf -t
+ExecStart=/usr/sbin/sshd -D -f /home/atnanasi/beurling-gateway/sshd.conf
+ExecReload=/usr/sbin/sshd -f /home/atnanasi/beurling-gateway/sshd.conf -t
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=notify
+RuntimeDirectory=sshd
+RuntimeDirectoryMode=0755
+
+[Install]
+WantedBy=multi-user.target
